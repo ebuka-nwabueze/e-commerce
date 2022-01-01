@@ -57,6 +57,19 @@ class UsersRepository {
     const filteredRecords = records.filter((record) => record.id !== id);
     await this.writeAll(filteredRecords);
   }
+
+  async update(id,attrs){
+    const records = await this.getAll();
+    const record = records.find((record) => record.id === id );
+
+    if(!record){
+        throw new Error(`The user with ${id} not found`)
+    }
+
+    Object.assign(record,attrs); 
+
+    await this.writeAll(records);
+  }
 } // end of constructor
 
 const test = async () => {
@@ -67,7 +80,8 @@ const test = async () => {
 
   // const user = await repo.getOne('2ca8cf42')
   // const c_user = user !== undefined ? user : 'User not found'
-  const deleteUser = await repo.delete("2ca8cf42");
+  //   const deleteUser = await repo.delete("2ca8cf42");
+    await repo.update('99d30718',{phone: "09082827272"});
   console.log();
 };
 
