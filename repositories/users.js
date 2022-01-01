@@ -1,8 +1,8 @@
 import fs from "fs";
 import crypto from "crypto";
-import util from 'util'
+import util from "util";
 
-const scrypt =  util.promisify(crypto.scrypt)
+const scrypt = util.promisify(crypto.scrypt);
 
 class UsersRepository {
   constructor(filename) {
@@ -32,19 +32,18 @@ class UsersRepository {
     // attach an id to a new record
     attrs.id = this.randomId();
 
-    const salt = crypto.randomBytes(8).toString('hex')
+    const salt = crypto.randomBytes(8).toString("hex");
 
-    const buffer = await scrypt(attrs.password, salt, 64)
-
+    const buffer = await scrypt(attrs.password, salt, 64);
 
     // retrieve all data inside the repository file
     const records = await this.getAll();
 
     // take the new data and push into the repository file
     const record = {
-        ...attrs,
-        password: `${buffer.toString('hex')}.${salt}`
-    }
+      ...attrs,
+      password: `${buffer.toString("hex")}.${salt}`,
+    };
     records.push(record);
 
     // save the new data into the filename.
@@ -53,12 +52,11 @@ class UsersRepository {
     return record;
   }
 
-  async comparePasswords(saved,supplied){
-      const [ hashed,salt ] = saved.split('.')
-      const hashedSupplied = await scrypt(supplied,salt,64);
-      return hashed === hashedSupplied
+  async comparePasswords(saved, supplied) {
+    const [hashed, salt] = saved.split(".");
+    const hashedSuppliedBuffer = await scrypt(supplied, salt, 64);
+    return hashed === hashedSuppliedBuffer.toString("hex");
   }
-
 
   // helper function to write new file
   async writeAll(records) {
@@ -83,40 +81,38 @@ class UsersRepository {
     await this.writeAll(filteredRecords);
   }
 
-  async update(id,attrs){
+  async update(id, attrs) {
     const records = await this.getAll();
-    const record = records.find((record) => record.id === id );
+    const record = records.find((record) => record.id === id);
 
-    if(!record){
-        throw new Error(`The user with ${id} not found`)
+    if (!record) {
+      throw new Error(`The user with ${id} not found`);
     }
 
-    Object.assign(record,attrs); 
+    Object.assign(record, attrs);
 
     await this.writeAll(records);
   }
 
-  async getOneBy(filters){
-      const records = await this.getAll();
+  async getOneBy(filters) {
+    const records = await this.getAll();
 
-      for (let record of records){
-        let found = true;
+    for (let record of records) {
+      let found = true;
 
-        for (let key in filters){
-            if(record[key]!== filters[key]){
-                found = false;
-            }
-        }
-        if (found){
-            return record;
+      for (let key in filters) {
+        if (record[key] !== filters[key]) {
+          found = false;
         }
       }
-
+      if (found) {
+        return record;
+      }
+    }
   }
 } // end of constructor
 
-export const repo = new UsersRepository('users.json')
-
+export const repo = new UsersRepository("users.json");
 
 // const test = async () => {
 //   const repo = new UsersRepository("users.json");
@@ -129,7 +125,6 @@ export const repo = new UsersRepository('users.json')
 //   // const deleteUser = await repo.delete("2ca8cf42");
 //   // await repo.update('99d30718',{phone: "09082827272"});
 //   const filteredValue = await repo.getOneBy({email:"test@email.com", phone: "09082827272"})
-
 
 //   console.log(filteredValue);
 // };
