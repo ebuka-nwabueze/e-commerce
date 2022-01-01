@@ -1,4 +1,5 @@
 import fs from "fs";
+import crypto from "crypto";
 
 class UsersRepository {
   constructor(filename) {
@@ -13,22 +14,61 @@ class UsersRepository {
     try {
       fs.accessSync(this.filename);
     } catch (error) {
-      fs.writeFileSync(this.filename, '[]');
+      fs.writeFileSync(this.filename, "[]");
     }
   }
   // promise function to have additionally, good to have outside the constructor.
   // it doesn't need to run immediately on class instatiation.
   async getAll() {
-    return JSON.parse(await fs.promises.readFile(this.filename, { encoding: 'utf8' }))
-  }; //** end of get all
-}
+    return JSON.parse(
+      await fs.promises.readFile(this.filename, { encoding: "utf8" })
+    );
+  }
+
+  async create(attrs) {
+    // attach an id to a new record
+    attrs.id = this.randomId();
+    // retrieve all data inside the repository file
+    const records = await this.getAll();
+    // take the new data and push into the current file
+    records.push(attrs);
+    // save the new data into the filename.
+    await this.writeAll(records);
+  }
+  // helper function to write new file
+  async writeAll(records) {
+    await fs.promises.writeFile(
+      this.filename,
+      JSON.stringify(records, null, 2)
+    );
+  }
+
+  randomId() {
+    return crypto.randomBytes(4).toString("hex");
+  }
+
+  async getOne(id) {
+    const records = await this.getAll();
+    return records.find((record) => record.id === id);
+  }
+
+  async delete(id) {
+    const records = await this.getAll();
+    const filteredRecords = records.filter((record) => record.id !== id);
+    await this.writeAll(filteredRecords);
+  }
+} // end of constructor
 
 const test = async () => {
-    const repo = new UsersRepository("users.json");
+  const repo = new UsersRepository("users.json");
 
-    const users = await repo.getAll();
-    console.log(users)
+  // await repo.create({email: 'test@email.com', password:'password'})
+  // const users = await repo.getAll();
+
+  // const user = await repo.getOne('2ca8cf42')
+  // const c_user = user !== undefined ? user : 'User not found'
+  const deleteUser = await repo.delete("2ca8cf42");
+  console.log();
 };
 
 test();
-
