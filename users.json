@@ -1,0 +1,24 @@
+[
+  {
+    "email": "overdose4g@gmail.com",
+    "password": "test123",
+    "passwordConfirmation": "test123",
+    "id": "da2d9084"
+  },
+  {
+    "email": "user02@gmail.com",
+    "password": "test321",
+    "passwordConfirmation": "test321",
+    "id": "63130553"
+  },
+  {
+    "email": "user01@gmail.com",
+    "password": "test321",
+    "id": "377702dd"
+  },
+  {
+    "email": "user03@gmail.com",
+    "password": "test321",
+    "id": "82089e2d"
+  }
+]
