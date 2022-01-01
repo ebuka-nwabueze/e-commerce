@@ -65,8 +65,17 @@ app.get("/signin", (req, res) => {
 `);
 });
 
-app.post('/signin', (req,res)=>{
-
+app.post('/signin', async (req,res)=>{
+    const {email, password} = req.body
+    const user = await repo.getOneBy({email})
+    if(!user){
+        return res.send('Email address not found')
+    }
+    if(user.password !== password){
+        return res.send('Password Incorrect. Try again!!!')
+    }
+    req.session.userId = user.id
+    res.send('You have been signed in')
 });
 
 app.listen(3000, () => {
