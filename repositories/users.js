@@ -70,6 +70,24 @@ class UsersRepository {
 
     await this.writeAll(records);
   }
+
+  async getOneBy(filters){
+      const records = await this.getAll();
+
+      for (let record of records){
+        let found = true;
+
+        for (let key in filters){
+            if(record[key]!== filters[key]){
+                found = false;
+            }
+        }
+        if (found){
+            return record;
+        }
+      }
+
+  }
 } // end of constructor
 
 const test = async () => {
@@ -80,9 +98,12 @@ const test = async () => {
 
   // const user = await repo.getOne('2ca8cf42')
   // const c_user = user !== undefined ? user : 'User not found'
-  //   const deleteUser = await repo.delete("2ca8cf42");
-    await repo.update('99d30718',{phone: "09082827272"});
-  console.log();
+  // const deleteUser = await repo.delete("2ca8cf42");
+  // await repo.update('99d30718',{phone: "09082827272"});
+  const filteredValue = await repo.getOneBy({email:"test@email.com", phone: "09082827272"})
+
+
+  console.log(filteredValue);
 };
 
 test();
