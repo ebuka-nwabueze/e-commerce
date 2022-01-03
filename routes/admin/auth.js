@@ -1,5 +1,5 @@
 import express from "express";
-import { check } from "express-validator";
+import { check, validationResult } from "express-validator";
 import { repo } from "../../repositories/users.js";
 import signUpTemplate from "../../views/admin/auth/signup.js";
 import signInTemplate from "../../views/admin/auth/signin.js";
@@ -10,26 +10,40 @@ router.get("/signup", (req, res) => {
   res.send(signUpTemplate({ req }));
 });
 
-router.post("/signup", async (req, res) => {
-  //retrieve the submited singup info
-  const { email, password, passwordConfirmation } = req.body;
+router.post(
+  "/signup",
+  [
+    check("email")
+      .trim()
+      .normalizeEmail()
+      .isEmail()
+      .custom(async (email) => {
+        const existingUser = await repo.getOneBy({ email });
+        if (existingUser) {
+          throw new Error("Email already in use");
+        }
+      }),
+    check("password").trim().isLength({ min: 4, max: 20 }),
+    check("passwordConfirmation")
+      .trim()
+      .isLength({ min: 4, max: 20 })
+      .custom((passwordConfirmation, { req }) => {
+        if (req.body.password !== passwordConfirmation) {
+          throw new Error("Password must match");
+        }
+      }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    console.log(errors);
+    //retrieve the submited singup info
+    const { email, password } = req.body;
+    const user = await repo.create({ email, password });
+    req.session.userId = user.id;
 
-  // check if the user exists using the submitted email, by call the repo instance imported.
-  const existingUser = await repo.getOneBy({ email });
-
-  if (existingUser) {
-    return res.send("Email already in use");
+    res.send("Account created!!!");
   }
-  if (password !== passwordConfirmation) {
-    return res.send("Password does not match");
-  }
-
-  const user = await repo.create({ email, password });
-
-  req.session.userId = user.id;
-
-  res.send("Account created!!!");
-});
+);
 
 router.get("/signout", (req, res) => {
   req.session = null;
