@@ -21,8 +21,8 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     console.log(errors);
-    if(!errors.isEmpty()){
-        res.send(signUpTemplate({ req , errors }));
+    if (!errors.isEmpty()) {
+      res.send(signUpTemplate({ req, errors }));
     }
 
     //retrieve the submitted signup info
@@ -43,21 +43,46 @@ router.get("/signin", (req, res) => {
   res.send(signInTemplate({ req }));
 });
 
-router.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await repo.getOneBy({ email });
-  if (!user) {
-    return res.send("Email address not found");
-  }
+router.post(
+  "/signin",
+  [check("email")
+    .trim()
+    .normalizeEmail()
+    .isEmail()
+    .withMessage("Must provide a valid email")
+    .custom( async ( email ) => {
+        const user = await repo.getOneBy({ email });
+        if (!user) {
+            throw new Error("Email address not found")
+        }
+    }),
+    
+    check("password")
+    .trim()
+    .custom( async (password, {req})=>{
+        const user = await repo.getOneBy({email: req.body.email})
+        if (!user) {
+            throw new Error("Password Incorrect. Try again!!!")
+        }
+        const ValidPassword = await repo.comparePasswords(user.password, password);
 
-  const ValidPassword = await repo.comparePasswords(user.password, password);
-
-  if (!ValidPassword) {
-    return res.send("Password Incorrect. Try again!!!");
+        if (!ValidPassword) {
+          throw new Error("Password Incorrect. Try again!!!")
+        }
+    })
+    ],
+  async (req, res) => {
+    const {email} = req.body
+    const errors = validationResult(req);
+    console.log(errors)
+    // if (!errors.isEmpty()) {
+    //     res.send(signInTemplate({ req, errors }));
+    // }
+    const user = await repo.getOneBy({ email });
+    req.session.userId = user.id;
+    res.send("You have been signed in");
   }
-  req.session.userId = user.id;
-  res.send("You have been signed in");
-});
+);
 
 // const authRouter =  router;
 
