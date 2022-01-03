@@ -7,6 +7,8 @@ import {
   requireEmail,
   requirePassword,
   requirePasswordComfirmation,
+  requireValidPassword,
+  requireValidPasswordForUser,
 } from "../../routes/admin/validators.js";
 
 const router = express.Router();
@@ -45,36 +47,11 @@ router.get("/signin", (req, res) => {
 
 router.post(
   "/signin",
-  [check("email")
-    .trim()
-    .normalizeEmail()
-    .isEmail()
-    .withMessage("Must provide a valid email")
-    .custom( async ( email ) => {
-        const user = await repo.getOneBy({ email });
-        if (!user) {
-            throw new Error("Email address not found")
-        }
-    }),
-    
-    check("password")
-    .trim()
-    .custom( async (password, {req})=>{
-        const user = await repo.getOneBy({email: req.body.email})
-        if (!user) {
-            throw new Error("Password Incorrect. Try again!!!")
-        }
-        const ValidPassword = await repo.comparePasswords(user.password, password);
-
-        if (!ValidPassword) {
-          throw new Error("Password Incorrect. Try again!!!")
-        }
-    })
-    ],
+  [requireValidPassword, requireValidPasswordForUser],
   async (req, res) => {
-    const {email} = req.body
+    const { email } = req.body;
     const errors = validationResult(req);
-    console.log(errors)
+    console.log(errors);
     // if (!errors.isEmpty()) {
     //     res.send(signInTemplate({ req, errors }));
     // }
