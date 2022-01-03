@@ -1,5 +1,7 @@
+import layout from "../layout.js";
 export default ({ req }) => {
-    return `
+  return layout({
+    content: `
     <div>
         <div>
         <a href="http://localhost:3000/signup">Sign UP</a>
@@ -10,5 +12,7 @@ export default ({ req }) => {
             <button type="submit">Sign In</button>
         </form>
     </div>
-`;
+`,
+    title: `Sign IN`,
+  });
 };
