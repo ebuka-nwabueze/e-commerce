@@ -5,6 +5,7 @@ export default ({ req }) => {
     <div>
         <div>
         <a href="http://localhost:3000/signin">Sign IN</a>
+        <a href="http://localhost:3000/signout">Sign OUT</a>
         </div>
 
         Your id is : ${req.session.userId}

@@ -3,6 +3,8 @@ import { check, validationResult } from "express-validator";
 import { repo } from "../../repositories/users.js";
 import signUpTemplate from "../../views/admin/auth/signup.js";
 import signInTemplate from "../../views/admin/auth/signin.js";
+// import { requireEmail , requirePassword,  requirePasswordComfirmation } from "../../routes/admin/validators.js"
+import { validatorCheck } from "../../routes/admin/validators.js";
 
 const router = express.Router();
 
@@ -12,31 +14,13 @@ router.get("/signup", (req, res) => {
 
 router.post(
   "/signup",
-  [
-    check("email")
-      .trim()
-      .normalizeEmail()
-      .isEmail()
-      .custom(async (email) => {
-        const existingUser = await repo.getOneBy({ email });
-        if (existingUser) {
-          throw new Error("Email already in use");
-        }
-      }),
-    check("password").trim().isLength({ min: 4, max: 20 }),
-    check("passwordConfirmation")
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .custom((passwordConfirmation, { req }) => {
-        if (req.body.password !== passwordConfirmation) {
-          throw new Error("Password must match");
-        }
-      }),
-  ],
+    [validatorCheck.requireEmail,validatorCheck.requirePassword, validatorCheck.requirePasswordComfirmation]
+    // [requireEmail,requirePassword,requirePasswordComfirmation]
+  ,
   async (req, res) => {
     const errors = validationResult(req);
     console.log(errors);
-    //retrieve the submited singup info
+    //retrieve the submitted signup info
     const { email, password } = req.body;
     const user = await repo.create({ email, password });
     req.session.userId = user.id;
@@ -71,5 +55,7 @@ router.post("/signin", async (req, res) => {
 });
 
 // const authRouter =  router;
+
+// console.log(validatorCheck)
 
 export default router;
