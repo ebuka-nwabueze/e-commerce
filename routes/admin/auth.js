@@ -6,25 +6,25 @@ import signInTemplate from "../../views/admin/auth/signin.js";
 import {
   requireEmail,
   requirePassword,
-  requirePasswordComfirmation,
-  requireValidPassword,
+  requirePasswordConfirmation,
+  requireValidEmail,
   requireValidPasswordForUser,
 } from "../../routes/admin/validators.js";
 
 const router = express.Router();
 
 router.get("/signup", (req, res) => {
-  res.send(signUpTemplate({ req }));
+  return res.send(signUpTemplate({ req }));
 });
 
 router.post(
   "/signup",
-  [requireEmail, requirePassword, requirePasswordComfirmation],
+  [requireEmail, requirePassword, requirePasswordConfirmation],
   async (req, res) => {
     const errors = validationResult(req);
     console.log(errors);
     if (!errors.isEmpty()) {
-      res.send(signUpTemplate({ req, errors }));
+       return res.send(signUpTemplate({ req, errors }));
     }
 
     //retrieve the submitted signup info
@@ -42,19 +42,19 @@ router.get("/signout", (req, res) => {
 });
 
 router.get("/signin", (req, res) => {
-  res.send(signInTemplate({ req }));
+  res.send(signInTemplate({}));
 });
 
 router.post(
   "/signin",
-  [requireValidPassword, requireValidPasswordForUser],
+  [requireValidEmail, requireValidPasswordForUser],
   async (req, res) => {
     const { email } = req.body;
     const errors = validationResult(req);
     console.log(errors);
-    // if (!errors.isEmpty()) {
-    //     res.send(signInTemplate({ req, errors }));
-    // }
+    if (!errors.isEmpty()) {
+        return res.send(signInTemplate({ req, errors }));
+    }
     const user = await repo.getOneBy({ email });
     req.session.userId = user.id;
     res.send("You have been signed in");

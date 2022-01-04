@@ -1,5 +1,8 @@
 import layout from "../layout.js";
-export default ({ req }) => {
+import { getErrors } from "../../helper.js";
+
+
+export default ({ errors }) => {
   return layout({
     content: `
     <div>
@@ -9,7 +12,9 @@ export default ({ req }) => {
         </div>
         <form method="POST">
             <input type="email" name="email" placeholder="email">
+            ${getErrors(errors, "email")}
             <input type="password" name="password" placeholder="password">
+            ${getErrors(errors, "password")}
             <button type="submit">Sign In</button>
         </form>
     </div>

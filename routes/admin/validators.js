@@ -19,17 +19,24 @@ const validatorCheck = {
     .isLength({ min: 4, max: 20 })
     .withMessage("Must be be between 4 and 20 Characters"),
 
-  requirePasswordComfirmation: check("passwordConfirmation")
+  requirePasswordConfirmation: 
+    check("passwordConfirmation")
     .trim()
     .isLength({ min: 4, max: 20 })
     .withMessage("Must be be between 4 and 20 Characters")
     .custom((passwordConfirmation, { req }) => {
-      if (req.body.password !== passwordConfirmation) {
+        console.log(passwordConfirmation,req.body.password  )
+      if (passwordConfirmation !== req.body.password ) {
         throw new Error("Password does not match");
+      }else{
+          return true 
+          // this is placed here because even if the above evaluation does not return an error. it skips the if statement 
+          // because it raises an undefined, which results to an error. 
+          // it is best to return true to avoid the error
       }
     }),
 
-  requireValidPassword: check("email")
+  requireValidEmail: check("email")
     .trim()
     .normalizeEmail()
     .isEmail()
@@ -46,7 +53,7 @@ const validatorCheck = {
     .custom(async (password, { req }) => {
       const user = await repo.getOneBy({ email: req.body.email });
       if (!user) {
-        throw new Error("Password Incorrect. Try again!!!");
+        throw new Error("Check email and enter a correct password");
       }
       const ValidPassword = await repo.comparePasswords(
         user.password,
@@ -65,7 +72,8 @@ const validatorCheck = {
 export const {
   requireEmail,
   requirePassword,
-  requirePasswordComfirmation,
-  requireValidPassword,
+  requirePasswordConfirmation,
+  requireValidEmail,
   requireValidPasswordForUser,
 } = validatorCheck;
+ 
