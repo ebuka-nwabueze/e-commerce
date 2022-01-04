@@ -5,6 +5,7 @@ import authRouter from "./routes/admin/auth.js";
 
 const app = express();
 
+app.use(express.static('public'))
 // ensures all requests gets parsed for middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(

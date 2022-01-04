@@ -90,5 +90,10 @@
     "email": "value1@gmail.com",
     "password": "1a2bc77e8bad78705ac58d9c905531e822d3e959cd307752e0a9107f0b74943537adb5d54ed99175121306461b5bdce9e0c86017b0d2ae1008e78cf9552cffb8.17fe4bd78a03d8bb",
     "id": "05e8710c"
+  },
+  {
+    "email": "value3@gmail.com",
+    "password": "17963a72f80193a912fd2a84a819d914e9666d06a561d5d84ecd095274713ffdce0d9f8a4afb472250d33b5aae87e31abba64ee817ca281fb8b06b128ab0346d.6c7f435d4c1282f5",
+    "id": "8711ebfa"
   }
 ]

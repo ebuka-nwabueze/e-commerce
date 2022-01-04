@@ -5,24 +5,35 @@ import { getErrors } from "../../helper.js"
 export default ({ req, errors }) => {
   return layout({
     content: `
-    <div>
-        <div>
-        <a href="http://localhost:3000/signin">Sign IN</a>
-        <a href="http://localhost:3000/signout">Sign OUT</a>
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-one-quarter">
+          <form method="POST">
+            <h1 class="title">Sign Up</h1>
+            <div class="field">
+              <label class="label">Email</label>
+              <input required class="input" placeholder="Email" name="email" />
+              <p class="help is-danger">${getErrors(errors, 'email')}</p>
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <input required class="input" placeholder="Password" name="password" type="password" />
+              <p class="help is-danger">${getErrors(errors, 'password')}</p>
+            </div>
+            <div class="field">
+              <label class="label">Password Confirmation</label>
+              <input required class="input" placeholder="Password Confirmation" name="passwordConfirmation" type="password" />
+              <p class="help is-danger">${getErrors(
+                errors,
+                'passwordConfirmation'
+              )}</p>
+            </div>
+            <button class="button is-primary">Submit</button>
+          </form>
+          <a href="/signin">Have an account? Sign In</a>
         </div>
-
-        Your id is : ${req.session.userId}
-        <form method="POST">
-            <input type="email" name="email" placeholder="email">
-            ${getErrors(errors,"email")}
-            <input type="password" name="password" placeholder="password">
-            ${getErrors(errors,"password")}
-            <input type="password" name="passwordConfirmation" placeholder="passwordConfirmation">
-            ${getErrors(errors,"passwordConfirmation")}
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
-    `,
+      </div>`
+   ,
     title: `Sign UP`,
   });
 };
