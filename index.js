@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from "body-parser";
 import cookieSession from "cookie-session";
 import authRouter from "./routes/admin/auth.js";
+import productRouter from "./routes/admin/products.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(
   })
 );
 app.use(authRouter)
+app.use(productRouter)
 
 
 app.listen(3000, () => {
