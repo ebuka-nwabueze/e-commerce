@@ -2,6 +2,10 @@ import { check } from "express-validator";
 import { repo } from "../../repositories/users.js";
 
 const validatorCheck = {
+  requireTitle: check("title").trim().isLength({ min: 4, max: 40 }). withMessage('must be between 4 and 20 characters'),
+
+  requirePrice: check("price").trim().toFloat().isFloat({ min: 1 }).withMessage("Must be a number greater than 1"),
+
   requireEmail: check("email")
     .trim()
     .normalizeEmail()
@@ -19,19 +23,18 @@ const validatorCheck = {
     .isLength({ min: 4, max: 20 })
     .withMessage("Must be be between 4 and 20 Characters"),
 
-  requirePasswordConfirmation: 
-    check("passwordConfirmation")
+  requirePasswordConfirmation: check("passwordConfirmation")
     .trim()
     .isLength({ min: 4, max: 20 })
     .withMessage("Must be be between 4 and 20 Characters")
     .custom((passwordConfirmation, { req }) => {
-      if (passwordConfirmation !== req.body.password ) {
+      if (passwordConfirmation !== req.body.password) {
         throw new Error("Password does not match");
-      }else{
-          return true 
-          // this is placed here because even if the above evaluation does not return an error. it skips the if statement 
-          // because it raises an undefined, which results to an error. 
-          // it is best to return true to avoid the error
+      } else {
+        return true;
+        // this is placed here because even if the above evaluation does not return an error. it skips the if statement
+        // because it raises an undefined, which results to an error.
+        // it is best to return true to avoid the error
       }
     }),
 
@@ -74,5 +77,6 @@ export const {
   requirePasswordConfirmation,
   requireValidEmail,
   requireValidPasswordForUser,
+  requireTitle,
+  requirePrice,
 } = validatorCheck;
- 
