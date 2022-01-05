@@ -5,20 +5,28 @@ import { getErrors } from "../../helper.js";
 export default ({ errors }) => {
   return layout({
     content: `
-    <div>
-        <div>
-        <a href="http://localhost:3000/signup">Sign UP</a>
-        <a href="http://localhost:3000/signout">Sign OUT</a>
+        <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-one-quarter">
+            <form method="POST">
+                <h1 class="title">Sign in</h1>
+                <div class="field">
+                <label class="label">Email</label>
+                <input required class="input" placeholder="Email" name="email" />
+                <p class="help is-danger">${getErrors(errors, 'email')}</p>
+                </div>
+                <div class="field">
+                <label class="label">Password</label>
+                <input required class="input" placeholder="Password" name="password" type="password" />
+                <p class="help is-danger">${getErrors(errors, 'password')}</p>
+                </div>
+                <button class="button is-primary">Submit</button>
+            </form>
+            <a href="/signup">Need an account? Sign Up</a>
+            </div>
         </div>
-        <form method="POST">
-            <input type="email" name="email" placeholder="email">
-            ${getErrors(errors, "email")}
-            <input type="password" name="password" placeholder="password">
-            ${getErrors(errors, "password")}
-            <button type="submit">Sign In</button>
-        </form>
-    </div>
-`,
+        </div>
+  `,
     title: `Sign IN`,
   });
 };
