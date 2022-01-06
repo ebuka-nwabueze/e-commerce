@@ -28,7 +28,7 @@ class Repository{
       async create(attrs){
           attrs.id = this.randomId()
 
-          const records = this.getAll()
+          const records = await this.getAll()
           records.push(attrs)
           await this.writeAll(records)
 
