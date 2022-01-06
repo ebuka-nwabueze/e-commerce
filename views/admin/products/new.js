@@ -1,14 +1,36 @@
 import layout from "../layout.js";
 import { getErrors } from "../../helper.js";
 
+
+
 export default ({errors}) => {
     return layout(
        { content: `
-       <form method="post" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="Title">
-            <input type="text" name="price" placeholder="Price">
-            <input type="file" name="image" placeholder="Image">
-            <button type="submit">Create Product</button>
-        </form>
-        `})
+       <div class="columns is-centered">
+         <div class="column is-half">
+           <h1 class="subtitle">Create a Product</h1>
+ 
+           <form method="POST" enctype="multipart/form-data">
+             <div class="field">
+               <label class="label">Title</label>
+               <input class="input" placeholder="Title" name="title">
+               <p class="help is-danger">${getErrors(errors, 'title')}</p>
+             </div>
+             
+             <div class="field">
+               <label class="label">Price</label>
+               <input class="input" placeholder="Price" name="price">
+               <p class="help is-danger">${getErrors(errors, 'price')}</p>
+             </div>
+             
+             <div class="field">
+               <label class="label">Image</label>            
+               <input type="file" name="image" />
+             </div>
+             <br />
+             <button class="button is-primary">Create</button>
+           </form>
+         </div>
+       </div>
+     `})
 };

@@ -2,9 +2,16 @@ import { check } from "express-validator";
 import { repo } from "../../repositories/users.js";
 
 const validatorCheck = {
-  requireTitle: check("title").trim().isLength({ min: 4, max: 40 }). withMessage('must be between 4 and 20 characters'),
+  requireTitle: check("title")
+    .trim()
+    .isLength({ min: 4, max: 40 })
+    .withMessage("must be between 4 and 20 characters"),
 
-  requirePrice: check("price").trim().toFloat().isFloat({ min: 1 }).withMessage("Must be a number greater than 1"),
+  requirePrice: check("price")
+    .trim()
+    .toFloat()
+    .isFloat({ min: 1 })
+    .withMessage("Must be a number greater than 1"),
 
   requireEmail: check("email")
     .trim()
