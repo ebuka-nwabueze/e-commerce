@@ -24,7 +24,6 @@ export default ({content}) => {
                <div class="navbar-buttons">
                  <div class="navbar-item">
                    <a href="/admin/products"><i class="fa fa-star"></i> Products</a>
-                   <a href="/admin/products/new"><i class="fa fa-star"></i> New Product</a>
                  </div>
                </div>
              </div>
