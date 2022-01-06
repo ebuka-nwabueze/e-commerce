@@ -10,7 +10,13 @@ const appMiddlewares = {
             }
             next();
         };
+    },
+    requireAuth(req,res,next){
+        if(!req.session.userId){
+           return res.redirect("/signin")
+        }
+        next();
     }
 };
 
-export const { handleErrors } = appMiddlewares
+export const { handleErrors, requireAuth } = appMiddlewares 

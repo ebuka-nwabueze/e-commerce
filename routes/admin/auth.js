@@ -3,7 +3,7 @@ import express from "express";
 import { check, validationResult } from "express-validator";
 
 // internal import
-import { handleErrors } from './middlewares.js'
+import { handleErrors } from "./middlewares.js";
 import { repo } from "../../repositories/users.js";
 import signUpTemplate from "../../views/admin/auth/signup.js";
 import signInTemplate from "../../views/admin/auth/signin.js";
@@ -31,7 +31,7 @@ router.post(
     const user = await repo.create({ email, password });
     req.session.userId = user.id;
 
-    res.send("Account created!!!");
+    res.redirect("/admin/products");
   }
 );
 
@@ -57,7 +57,7 @@ router.post(
     const { email } = req.body;
     const user = await repo.getOneBy({ email });
     req.session.userId = user.id;
-    res.send("You have been signed in");
+    res.redirect("/admin/products");
   }
 );
 
