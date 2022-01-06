@@ -19,7 +19,7 @@ export default ({product}) => {
              </div>
              <div class="field">
                <label class="label">Image</label>
-               <input class="file" placeholder="Image" name="image">
+               <input type="file" placeholder="Image" name="image">
              </div>
 
              <button class="button is-primary">Update Product</button>
