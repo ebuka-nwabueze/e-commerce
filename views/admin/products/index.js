@@ -14,7 +14,9 @@ export default ({ products }) => {
             </a>
             </td>
             <td>
-            <button class="button is-danger">Delete</button>
+                <form action="/admin/products/${product.id}/delete" method="POST">
+                    <button class="button is-danger">Delete</button>
+                </form>
             </td>
         </tr>
         `;

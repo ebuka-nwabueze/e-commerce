@@ -51,24 +51,29 @@ router.post(
   upload.single("image"),
   [requireTitle, requirePrice],
   handleErrors(productEditTemplate, async (req) => {
-    const product = await productRepo.getOne(req.params.id)
-    return { product }
+    const product = await productRepo.getOne(req.params.id);
+    return { product };
   }),
   async (req, res) => {
     const changes = req.body;
 
-    if(req.file){
-        changes.image = req.file.buffer.toString("base64");
+    if (req.file) {
+      changes.image = req.file.buffer.toString("base64");
     }
 
     try {
-        await productRepo.update(req.params.id, changes)
+      await productRepo.update(req.params.id, changes);
     } catch (error) {
-       return res.send('Product not found')
+      return res.send("Product not found");
     }
 
     res.redirect("/admin/products");
   }
 );
+
+router.post("/admin/products/:id/delete", requireAuth, async (req, res) => {
+  await productRepo.delete(req.params.id);
+  res.redirect("/admin/products/");
+});
 
 export default router;

@@ -8,7 +8,8 @@ export default ({errors, product}) => {
        { content: `
        <div class="columns is-centered">
         <div class="column is-half">
-           <form method="POST" >
+          <h1 class="subtitle">Edit a Product</h1>
+           <form method="POST" enctype="multipart/form-data" >
              <div class="field">
                <label class="label">Title</label>
                <input class="input" placeholder="Title" name="title" value="${product.title}">
@@ -24,8 +25,9 @@ export default ({errors, product}) => {
                <input type="file" placeholder="Image" name="image">
                <p class="help is-danger">${getErrors(errors, 'image')}</p>
              </div>
-
-             <button class="button is-primary">Update Product</button>
+             <br />
+             <button class="button is-primary">Update</button>
+             <a href="/admin/products" class="button is-danger">Cancel</a>
            </form>
            </div>
         </div>
