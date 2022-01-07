@@ -3,7 +3,7 @@ import { getErrors } from "../../helper.js";
 
 
 
-export default ({product}) => {
+export default ({errors, product}) => {
     return layout(
        { content: `
        <div class="columns is-centered">
@@ -12,14 +12,17 @@ export default ({product}) => {
              <div class="field">
                <label class="label">Title</label>
                <input class="input" placeholder="Title" name="title" value="${product.title}">
+               <p class="help is-danger">${getErrors(errors, 'title')}</p>
              </div>
              <div class="field">
                <label class="label">Price</label>
                <input class="input" placeholder="Price" name="price" value="${product.price}">
+               <p class="help is-danger">${getErrors(errors, 'price')}</p>
              </div>
              <div class="field">
                <label class="label">Image</label>
                <input type="file" placeholder="Image" name="image">
+               <p class="help is-danger">${getErrors(errors, 'image')}</p>
              </div>
 
              <button class="button is-primary">Update Product</button>
