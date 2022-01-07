@@ -1,12 +1,16 @@
 import { validationResult } from "express-validator";
 
 const appMiddlewares = {
-    handleErrors(templateFunction){
-        return (req,res,next) => {
+    handleErrors(templateFunction, productCallBack){
+        return async (req,res,next) => {
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
-              return res.send(templateFunction({req: {},  errors }));
+                let data = {};
+                if (productCallBack){
+                    data = await productCallBack(req)
+                }
+              return res.send(templateFunction({ errors, ...data }));
             }
             next();
         };
