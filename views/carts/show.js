@@ -1,13 +1,12 @@
 import layout from "../products/layout.js";
 
-export default ({items}) => {
-    const totalPrice = items.reduce((prev,item)=>{
-        return prev + item.quantity * item.product.price
-    },0);
+export default ({ items }) => {
+  const totalPrice = items.reduce((prev, item) => {
+    return prev + item.quantity * item.product.price;
+  }, 0);
 
-
-    const renderedItems = items
-    .map(item => {
+  const renderedItems = items
+    .map((item) => {
       return `
         <div class="cart-item message">
           <h3 class="subtitle">${item.product.title}</h3>
@@ -19,7 +18,8 @@ export default ({items}) => {
               $${item.product.price * item.quantity}
             </div>
             <div class="remove">
-              <form method="POST">
+              <form method="POST" action="/carts/product/delete">
+              <input type="hidden" name="itemId" value="${item.id}">
                 <button class="button is-danger">                  
                   <span class="icon is-small">
                     <i class="fas fa-times"></i>
@@ -31,7 +31,7 @@ export default ({items}) => {
         </div>
       `;
     })
-    .join('');
+    .join("");
 
   return layout({
     content: `
@@ -54,6 +54,6 @@ export default ({items}) => {
           <div class="column"></div>
         </div>
       </div>
-    `
+    `,
   });
 };

@@ -31,7 +31,7 @@ router.post("/cart/products", async (req, res) => {
     items: cart.items,
   });
 
-  res.send("Product added");
+  res.redirect("/");
 });
 
 
@@ -52,6 +52,16 @@ router.get("/cart", async (req,res) => {
 });
 
 
+router.post("/carts/product/delete", async (req,res)=>{
+    const itemIdDelete = req.body.itemId
+    const cart = await cartsRepo.getOne(req.session.cartId)
+
+    const items = cart.items.filter(item => item.id !== itemIdDelete)
+
+    await cartsRepo.update(req.session.cartId,{items})
+
+    res.redirect("/cart")
+});
 
 
 export default router;  
@@ -66,4 +76,4 @@ export default router;
 //       product: {
 //         title: 'Floral Dress',
 //         price: 25,
-//         image: 
+//         
