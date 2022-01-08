@@ -34,7 +34,7 @@ export default ({products}) => {
             <img src="/images/banner.jpg" />
           </div>
         </div>
-      </section>
+      </section> 
       
       <section>
         <div class="container">
