@@ -39,16 +39,15 @@ router.get("/cart", async (req,res) => {
     if(!req.session.cartId){
         return res.redirect('/')
     }
-    console.log(req.session.cartId)
+    
     const cart = await cartsRepo.getOne(req.session.cartId)
-    console.log("cart is", cart)
+   
 
     for(let item of cart.items){
         const product = await productRepo.getOne(item.id)
 
         item.product = product;
     }
-    console.log("cart.items is", cart.items)
     res.send(cartShowTemplate({ items: cart.items }))
 });
 
@@ -59,3 +58,12 @@ export default router;
 
 //{ items: [], id: 'c8282277' } ac3d7258
 //{ items: [ {id: '62b582ba', quantity: 1 }], id: '9df807a1' }
+
+// cart.items is [
+//     {
+//       id: '9317ff17',
+//       quantity: 4,
+//       product: {
+//         title: 'Floral Dress',
+//         price: 25,
+//         image: 

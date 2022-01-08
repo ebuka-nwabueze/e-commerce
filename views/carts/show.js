@@ -1,7 +1,9 @@
 import layout from "../products/layout.js";
 
 export default ({items}) => {
-    
+    const totalPrice = items.reduce((prev,item)=>{
+        return prev + item.quantity * item.product.price
+    },0);
 
 
     const renderedItems = items
@@ -45,7 +47,7 @@ export default ({items}) => {
               <div class="message-header">
                 Total
               </div>
-              <h1 class="title">$</h1>
+              <h1 class="title">$${totalPrice}</h1>
               <button class="button is-primary">Buy</button>
             </div>
           </div>
