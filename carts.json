@@ -25,7 +25,11 @@
     "items": [
       {
         "id": "62b582ba",
-        "quantity": 6
+        "quantity": 7
+      },
+      {
+        "id": "9317ff17",
+        "quantity": 1
       }
     ],
     "id": "a77f9136"

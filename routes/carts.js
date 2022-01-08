@@ -1,6 +1,7 @@
 import express from "express";
 import {cartsRepo} from "../repositories/carts.js";
 import { productRepo } from "../repositories/products.js";
+import cartShowTemplate from "../views/carts/show.js";
 
 const router = express.Router();
 
@@ -38,14 +39,16 @@ router.get("/cart", async (req,res) => {
     if(!req.session.cartId){
         return res.redirect('/')
     }
-    cart = await cartsRepo.getOne(req.session.id)
+    console.log(req.session.cartId)
+    const cart = await cartsRepo.getOne(req.session.cartId)
+    console.log("cart is", cart)
 
     for(let item of cart.items){
-        const product = productRepo.getOne(item.id)
+        const product = await productRepo.getOne(item.id)
 
         item.product = product;
     }
-
+    console.log("cart.items is", cart.items)
     res.send(cartShowTemplate({ items: cart.items }))
 });
 
